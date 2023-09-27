@@ -1,0 +1,10 @@
+pm.test("Response does not contain item", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    let expected = data.find(x => x.courseId === 19999);
+    //multiple ways to check
+    pm.expect(expected).to.be.undefined;
+    pm.expect(expected).length === 0;
+});
