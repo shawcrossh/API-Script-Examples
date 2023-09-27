@@ -1,0 +1,33 @@
+//verify all objects' libraryIds are the same value
+pm.test("Property matches value (annotated)", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).length.is.greaterThan(0);
+    //extract all ids to an array using map
+    let ids = response.data.map(o => o.libraryId);
+    //value to compare against is probably in variables
+    //let pubId = pm.collectionVariables.get("validLibraryId");
+    let pubId = "248";
+    //use every function of array to test that they all match
+    const isMatch = ids.every((x) => x == pubId);
+    pm.expect(isMatch).to.be.true;
+});
+
+/* reference:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+*/
+
+pm.test("Property matches value", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).length.is.greaterThan(0);
+    let ids = response.data.map(o => o.libraryId);
+    let pubId = "248";
+    const isMatch = ids.every((x) => x == pubId);
+    pm.expect(isMatch).to.be.true;
+});
+
+
