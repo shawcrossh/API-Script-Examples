@@ -1,0 +1,5 @@
+pm.test("Check header cache-control is set to no-store", function () {
+  let headers = pm.response.headers;
+  let cache_control = headers.find(o => o.key === "Cache-Control");
+  pm.expect(cache_control.value).eql("no-store, must-revalidate, no-cache, max-age=0");
+});
