@@ -1,0 +1,19 @@
+//define (or retrieve) example
+let expected = {
+    "userId": 12345,
+    "fieldName": "ExampleIdNumber",
+    "fieldValue": "654321"
+}
+
+pm.test("Response matches example (compare objects as strings)", () => {
+    let response = JSON.stringify(pm.response.json());
+    pm.expect(response).to.equal(JSON.stringify(expected));
+});
+
+pm.test("Response matches example (compare properties)", () => {
+    let response = pm.response.json();
+    for (let key in expected) {
+        pm.expect(response[key]).eql(expected[key])
+    }
+});
+
