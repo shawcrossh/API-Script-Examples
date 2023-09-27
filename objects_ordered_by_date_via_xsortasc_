@@ -1,0 +1,59 @@
+//NOTE:
+//see pre-request script to set x-sort
+//encoded sort is stored in variable, set in pre-request 
+//this sort variable is referenced in headers
+
+//response must have a data property
+//checked when checking dates, extracted here for clarity
+pm.test("Response returned objects (partial)", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+});
+
+//data must have records or dates to check
+//checked when checking dates, extracted here for clarity
+pm.test("Data has elements (partial)", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    pm.expect(data).length.is.greaterThan(0);
+});
+
+//actually check data's date order, in this case releasedate
+pm.test("Archive dates are most recent first (annotated)", () => {
+    //verify there is data
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    pm.expect(data).length.is.greaterThan(0);
+    //extract and format dates for comparison
+    //use momentjs 
+    let moment = require("moment");
+    //format dates as sortable string
+    let dates = data.map(o => moment(o.archiveDate).format("YYYYMMDD"));
+    //verify the dates are in descending order
+    //specifically, verify each subsequent date after the first
+    //is greater than or equal to the date before it in the array
+    const isAsc = dates.every((x, i, d) => i === 0 || x >= d[i - 1]);
+    pm.expect(isAsc).to.be.true;
+});
+
+/* reference:
+https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/01-format/
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+*/
+
+pm.test("Archive dates are most recent first", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    pm.expect(data).length.is.greaterThan(0);
+    //format and extract dates to compare
+    let moment = require("moment");
+    let dates = data.map(o => moment(o.archiveDate).format("YYYYMMDD"));
+    const isAsc = dates.every((x, i, d) => i === 0 || x >= d[i - 1]);
+    pm.expect(isAsc).to.be.true;
+});
