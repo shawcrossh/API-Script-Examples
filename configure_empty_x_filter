@@ -1,0 +1,23 @@
+//NOTE:
+//see pre-request script to set x-filter
+//encoded filter is stored in variable, set in pre-request 
+//this filter variable is referenced in headers
+
+//the tests below is not needed in any tests for skapa
+//is just to verify pre-request is working properly 
+pm.test("x-filter is configured", () => {
+    let actualFilter = pm.request.headers.find(h => h.key == "x-filter").value;
+    let intendedFilter = pm.collectionVariables.get("filterHeader");
+    pm.expect(actualFilter).to.eql(intendedFilter);
+});
+
+pm.test("x-filter configuration matches intention", () => {
+    let filterHeader = pm.request.headers.find(h => h.key == "x-filter").value;
+    let actualFilter = CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(filterHeader));
+    var filter = [];
+    pm.expect(actualFilter).to.eql(JSON.stringify(filter));
+});
+
+//reference:
+//https://stackoverflow.com/questions/25492179/decode-a-base64-string-using-cryptojs
+
