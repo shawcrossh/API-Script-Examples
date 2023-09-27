@@ -1,0 +1,54 @@
+pm.test("Parse value from URL (annotated)", function () {
+    //import js url package
+    const URL = require('url');
+    //get response and inspect
+    let response = pm.response.json();
+    pm.expect(response).to.haveOwnProperty("url");
+    //get url from json
+    let rawUrl = response.url;
+    pm.expect(rawUrl).to.eql("https://enrollment.course.com/123456/098765");
+    //parse using url class
+    const parsedUrl = URL.parse(rawUrl);
+    //get path
+    let path = parsedUrl.pathname;
+    pm.expect(path).to.eql("/123456/098765");
+    //split values 
+    var vals = path.split("/");
+    pm.expect(vals).to.have.lengthOf(3);
+    pm.expect(vals[1]).to.eql("123456");
+    pm.expect(vals[2]).to.eql("098765");
+    //get first value and store off
+    let value = Number(vals[1]);
+    pm.expect(value).to.be.a('number');
+    pm.collectionVariables.set('parsedUrlValue', value);
+});
+
+/*
+reference:
+https://javascript.info/url
+https://github.com/postmanlabs/postman-app-support/issues/3059
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split
+https://www.w3schools.com/jsref/jsref_number.asp
+*/
+
+pm.test("Parse value from URL", () => {
+    //use url lib
+    const URL = require('url');
+    //get url and parse id
+    let response = pm.response.json();
+    pm.expect(response).to.haveOwnProperty("url");
+    let rawUrl = response.url;
+    const parsedUrl = URL.parse(rawUrl);
+    let path = parsedUrl.pathname;
+    //format of path is like "/1234/1234"
+    var vals = path.split("/");
+    pm.expect(vals).to.have.lengthOf(3);
+    //get first actual value to use later
+    let value = Number(vals[1]);
+    pm.collectionVariables.set('parsedUrlValue', value);
+});
+
+
+
+
+
