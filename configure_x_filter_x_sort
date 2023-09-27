@@ -1,0 +1,42 @@
+//NOTE:
+//see pre-request script to set x-sort and x-filter
+//encoded sort is stored in variables, referenced in headers
+
+//the tests below is not needed in any tests for skapa
+//is just to verify pre-request is working properly 
+pm.test("x-sort is configured", () => {
+    let actualSort = pm.request.headers.find(h => h.key == "x-sort").value;
+    let intendedSort = pm.collectionVariables.get("sortHeader");
+    pm.expect(actualSort).to.eql(intendedSort);
+});
+
+pm.test("x-sort configuration matches intention", () => {
+    let sortHeader = pm.request.headers.find(h => h.key == "x-sort").value;
+    let actualSort = CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(sortHeader));
+    var sort = [{
+        "fieldName": "releaseDate",
+        "sortOrder": 2
+    }];
+    pm.expect(actualSort).to.eql(JSON.stringify(sort));
+});
+
+pm.test("x-filter is configured", () => {
+    let actualFilter = pm.request.headers.find(h => h.key == "x-filter").value;
+    let intendedFilter = pm.collectionVariables.get("filterHeader");
+    pm.expect(actualFilter).to.eql(intendedFilter);
+});
+
+pm.test("x-filter configuration matches intention", () => {
+    let filterHeader = pm.request.headers.find(h => h.key == "x-filter").value;
+    let actualFilter = CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(filterHeader));
+    var filter = [{
+        "fieldNames": ["searchQuery"],
+        "filterType": 3,
+        "matches": [43]
+    }];
+    pm.expect(actualFilter).to.eql(JSON.stringify(filter));
+});
+
+//reference:
+//https://stackoverflow.com/questions/25492179/decode-a-base64-string-using-cryptojs
+
