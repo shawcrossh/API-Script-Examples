@@ -1,0 +1,25 @@
+//using momentjs
+let moment = require('moment');
+
+pm.test("Release date is this week (annotated)", () => {
+    let response = pm.response.json();    
+    //create date from response as moment
+    let date = new moment(response.releaseDate);
+    //create date to compare against
+    let startOfWeek = new moment().startOf('week').format("YYYY-MM-DD");
+    //compare dates using moment
+    let after = date.isAfter(startOfWeek);
+    pm.expect(after).to.be.true;
+});
+
+//reference: https://momentjscom.readthedocs.io/en/latest/moment/05-query/03-is-after/
+
+pm.test("Release date is this week", () => {
+    let response = pm.response.json();
+    let startOfWeek = new moment().startOf('week').format("YYYY-MM-DD");
+    pm.expect(moment(response.releaseDate).isAfter(startOfWeek)).to.be.true;
+});
+
+
+
+
