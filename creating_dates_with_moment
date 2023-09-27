@@ -1,0 +1,29 @@
+/* consider doing most everything with dates using moment
+reference:
+https://momentjs.com/guides/
+
+for comparison, dates in js, no external libs
+var basicDate = new Date('1/1/2016');
+var nextDecember3rd = new Date((today.getFullYear()+1).toString() + "-12-03");
+*/
+
+//using momentjs
+let moment = require('moment');
+
+//examples of defining dates
+let today = new moment().format("YYYY-MM-DD");
+let yesterday = new moment().add(-1, 'days').format("YYYY-MM-DD");
+let startOfThisMonth = new moment().startOf('month').format("YYYY-MM-DD");
+let startOfLastMonth = new moment().add(-1, 'months').startOf('month').format("YYYY-MM-DD");
+let endOfLastMonth = new moment().add(-1, 'months').endOf('month').format("YYYY-MM-DD");
+let endOfNextMonth = new moment().add(1, 'months').endOf('month').format("YYYY-MM-DD");
+let startOfMonthAsOf7DaysAgo = new moment().add(-7, 'days').startOf('month').format("YYYY-MM-DD");
+let startOfMonth14DaysFromNow = new moment().add(14, 'days').startOf('month').format("YYYY-MM-DD");
+let startOfWeek = new moment().startOf('week').format("YYYY-MM-DD");
+//note: first day of week is sunday by default, use isoWeek for monday
+let startOfWeekMonday = new moment().startOf('isoWeek').format("YYYY-MM-DD");
+let tomorrowAt640AM = new moment().startOf('day').utc().add(1, 'day').add(6, 'hours').add(40, 'minutes');
+let tomorrowAtNoon = new moment().startOf('day').utc().add(1, 'day').add(12, 'hours');
+
+
+
