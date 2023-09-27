@@ -1,0 +1,11 @@
+pm.test("Responses returns expected number of items", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    //multiple ways to check
+    pm.expect(data.length).to.eql(5);
+    pm.expect(data.count()).to.eql(5);
+    pm.expect(data.length).to.be.lessThan(10);
+    pm.expect(data.length).to.be.greaterThan(1);
+});
