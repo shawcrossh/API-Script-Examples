@@ -1,0 +1,59 @@
+//response must have a data property
+//checked later too, extracted here for clarity
+pm.test("Response returned objects (partial)", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+});
+
+//data must have records or dates to check
+//checked later too, extracted here for clarity
+pm.test("Data has elements (partial)", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    pm.expect(data).length.is.greaterThan(0);
+});
+
+//actually check all object's specific property for a value, in this case title
+pm.test("Title contains value (annotated)", () => {
+    //verify response contains data and data has elements
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    pm.expect(data).length.is.greaterThan(0);
+    //probably get the value to search for from a variable
+    //let val = pm.collectionVariables.get("validVolumeNo");
+    //...but we will just set it here for simplicity
+    let val = "43";
+    //using underscorejs, does not need to extract to array using map
+    //data is all objects, and (item) is each item to check
+    _.each(data, (item) => {
+        pm.expect(item.courseTitle).to.contain(val);
+    })
+    //or, extract to array first using map
+    //as when checking by dates (see "Objects are ordered by date")
+    //and use array's every method  
+    let titles = data.map(o => o.courseTitle); 
+    const valExists = titles.every((x) => x.includes(val));
+    pm.expect(valExists).to.be.true;
+});
+
+/* reference:
+https://www.tutorialspoint.com/underscorejs/underscorejs_each.htm
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+*/
+
+pm.test("Title contains value", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    pm.expect(data).length.is.greaterThan(0);
+    let val = "43";
+    _.each(data, (item) => {
+        pm.expect(item.courseTitle).to.contain(val);
+    })
+});
