@@ -1,0 +1,4 @@
+pm.test("Response size within expected range", function () {
+    pm.expect(pm.response.responseSize).to.be.gt(3000); // 3 kb
+    pm.expect(pm.response.responseSize).to.be.lt(100000); // 100 kb
+});
