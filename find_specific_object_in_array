@@ -1,0 +1,13 @@
+pm.test("Expected exists in response", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    let expected = data.find(x => x.courseId === 8211);
+    pm.expect(expected).length === 1;
+    pm.expect(expected.courseCode === "ABC-AHC-CTU-43-04");
+    //can also use first, to return first match (vs all matches)
+    //count will always be 1 (or 0, if not found)
+    let alsoExpected = data.first(x => x.courseId === 8211);
+    pm.expect(alsoExpected.courseCode === "ABC-AHC-CTU-43-04");
+});
