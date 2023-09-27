@@ -1,0 +1,16 @@
+pm.test("First item is as expected", () => {
+    let response = pm.response.json();
+    pm.expect(response).to.have.property("data");
+    const data = response.data;
+    pm.expect(data).to.be.an("array");
+    //first element in array
+    let first = data[0];
+    pm.expect(first).courseCode = "ABC-AHC-CTU-43-05";
+    //can also use first() method
+    let alsoFirst = data.first();
+    pm.expect(alsoFirst).courseCode = "ABC-AHC-CTU-43-05";
+    //first can also have a function
+    //in this case, returns first match
+    let matchingFirst = data.first(o => o.courseCode === "ABC-AHC-CTU-43-03");
+    pm.expect(matchingFirst).courseCode = "ABC-AHC-CTU-43-03";
+});
