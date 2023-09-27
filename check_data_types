@@ -1,0 +1,9 @@
+//schema check does a more thorough job of this, 
+//but sometimes maybe useful to check this way
+
+pm.test("Data types are as expected", () => {
+    let response = pm.response.json();    
+    pm.expect(response.courseEnrollmentId).to.be.null;
+    pm.expect(response.courseCode).to.be.a('string');
+    pm.expect(response.duration).to.be.a('number');
+});
